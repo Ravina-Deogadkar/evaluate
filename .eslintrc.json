@@ -9,21 +9,18 @@
   },
   "extends": "eslint:recommended",
   "rules": {
-    "indent": [
-      "error",
-      2
-    ],
-    "linebreak-style": [
-      "error",
-      "unix"
-    ],
-    "quotes": [
-      "error",
-      "single"
-    ],
-    "semi": [
-      "error",
-      "always"
-    ]
+   
+	"linebreak-style": ["off", "unix"],
+        "no-case-declarations": "off",
+        "no-console": "off",
+        "eqeqeq": ["warn", "always"],
+        "no-undef": "error",
+        "no-undef-init": "error",
+        "no-undefined": "error",
+        "no-unused-vars": "warn",
+        "no-shadow": "warn",
+        "no-shadow-restricted-names": "error",
+        "no-extra-boolean-cast": "off",
+        "require-atomic-updates": "off"
   }
 }

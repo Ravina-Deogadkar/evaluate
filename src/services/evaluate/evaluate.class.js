@@ -1,16 +1,19 @@
 const { Service } = require('feathers-memory');
 const { Stack } = require('./stack');
 
-var Expression = [];
-
 exports.Evaluate = class Evaluate extends Service {
+	//splitting an expression.
 	splitter(expr) {
+		var Expression = [];
 		const trimmedExpr = expr.trim();
 		for (let i = 0; i < trimmedExpr.length; i++) {
 			Expression.push(trimmedExpr[i]);
 		}
+		return Expression;
 	}
-	validator(expr) {
+
+	//Check for validity of the expression.
+	validator(Expression) {
 		let flag = true;
 		for (let i = 0; i < Expression.length; i++) {
 
@@ -28,6 +31,8 @@ exports.Evaluate = class Evaluate extends Service {
 		}
 		return flag;
 	}
+
+	// Check if character is digit.
 	isDigit(ExprChar) {
 		if (ExprChar === "+" || ExprChar === "-" || ExprChar === "*" || ExprChar === "/") {
 			return false;
@@ -36,20 +41,22 @@ exports.Evaluate = class Evaluate extends Service {
 			return true;
 		}
 	}
+
+	//check for priority of operator
 	checkPriority(ExprChar) {
 		switch (ExprChar) {
 			case "+":
 			case "-":
 				return 1;
 			case "*":
-				return 2;
 			case "/":
 				return 2;
 
 		}
 	}
 
-	convertOrder() {
+	//Convert an infix expression into postfix expression.
+	convertOrder(Expression) {
 		let exprStack = new Stack();
 		let i = 0;
 		var postFixExpr = [];
@@ -78,8 +85,9 @@ exports.Evaluate = class Evaluate extends Service {
 		return postFixExpr;
 	}
 
-	evaluate() {
-		const postFixExpr = this.convertOrder();
+	// Evaluate a postfix expression.
+	evaluate(Expression) {
+		const postFixExpr = this.convertOrder(Expression);
 		let evaluateStack = new Stack();
 		let i = 0;
 		while (i < postFixExpr.length) {
@@ -106,9 +114,9 @@ exports.Evaluate = class Evaluate extends Service {
 		return result;
 	}
 	async create(data) {
-		this.splitter(data.expression);
-		if (this.validator(data.expression)) {
-			const result = this.evaluate();
+		const Expression = this.splitter(data.expression);
+		if (this.validator(Expression)) {
+			const result = this.evaluate(Expression);
 			return result;
 		}
 		return "invalid expression";
